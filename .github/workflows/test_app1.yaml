@@ -1,3 +1,4 @@
+---
 name: Deploy to AWS for Testing (React App)
 run-name: ${{github.actor}} initiated the workflow - Deployment to AWS Testing
 on:
@@ -36,9 +37,9 @@ jobs:
         if: always()
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: 54.82.232.65
+          host: 13.53.190.76
           username: ubuntu
-          key: ${{ secrets.SSH_KEY }}
+          key: ${{ secrets.SSH_PEM }}
           port: 22
           script: |
             cd react_app
@@ -53,13 +54,13 @@ jobs:
           server_port: 465
           secure: true
           subject: GitHub Action Success
-          to: shahryarmalik16@gmail.com
-          from: shahryarmalik16@gmail.com
+          to: ammarfarrukh2017@gmail.com
+          from: ammarfarrukh2017@gmail.com
           body: >
             Workflow of ${{github.repository}} initiated by ${{github.actor}} was
             successfully executed.
 
-            View the changes on the server http://54.82.232.65/
+            View the changes on the server http://13.53.190.76/
       - name: Notify on Failure
         if: failure()
         uses: dawidd6/action-send-mail@v3
@@ -69,8 +70,8 @@ jobs:
           server_port: 465
           secure: true
           subject: GitHub Action Failure
-          to: shahryarmalik16@gmail.com
-          from: shahryarmalik16@gmail.com
+          to: ammarfarrukh2017@gmail.com
+          from: ammarfarrukh2017@gmail.com
           body: >
             Workflow of ${{github.repository}} initiated by ${{github.actor}} failed,
             kindly check the workflow logs!
