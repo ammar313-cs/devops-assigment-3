@@ -43,8 +43,7 @@ jobs:
           key: ${{ secrets.SSH_PEM }}
           port: 22
           script: |
-            cd react_app
-            rsync -avzr --delete ./* ~/  # Deploy changes using rsync
+            cd /home/ubuntu/react/devops-assignment2/react_app
             npm install  # Install new dependencies
       - name: Notify on Success
         if: success()
