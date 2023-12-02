@@ -1,13 +1,11 @@
 ---
-name: Deploy to AWS for Testing (React App)
-run-name: ${{github.actor}} initiated the workflow - Deployment to AWS Testing
+name: Staging Server Deployment Workflow
 on:
-  pull_request:
+  push:
     branches:
       - master
-  workflow_dispatch: null
 jobs:
-  deploy:
+  deploy_staging:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -26,7 +24,7 @@ jobs:
         run: |
           cd react_app
           npm run build-react
-      - name: Run Unit Tests
+      - name: Test Project
         run: |
           cd react_app
           npm run test-react
@@ -34,18 +32,25 @@ jobs:
         run: |
           cd react_app
           npx eslint src/sum.js src/cartview.js src/shippingOptions.js
-      - name: Deploy and Install Dependencies
-        if: always()
+      - name: Deploy to Staging Server
+        uses: burnett01/rsync-deployments@6.0.0
+        with:
+          switches: -avzr --delete
+          path: ./*
+          remote_path: ~/
+          remote_host: 13.53.176.45
+          remote_user: ubuntu
+          remote_key: ${{ secrets.SSH_PEM }}
+      - name: Install Node Modules on Server
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: 13.53.190.76
+          host: 13.53.176.45
           username: ubuntu
           key: ${{ secrets.SSH_PEM }}
           port: 22
           script: |
             cd react_app
-            rsync -avzr --delete ./* ~/  # Deploy changes using rsync
-            npm install  # Install new dependencies
+            npm install
       - name: Notify on Success
         if: success()
         uses: dawidd6/action-send-mail@v3
@@ -55,13 +60,13 @@ jobs:
           server_port: 465
           secure: true
           subject: GitHub Action Success
-          to: ammarfarrukh2017@gmail.com
-          from: ammarfarrukh2017@gmail.com
+          to: ${{secrets.MAIL_NAME}}
+          from: ${{secrets.MAIL_NAME}}
           body: >
             Workflow of ${{github.repository}} initiated by ${{github.actor}} was
             successfully executed.
 
-            View the changes on the server http://13.53.190.76/
+            View the changes on the server http://13.53.176.45/
       - name: Notify on Failure
         if: failure()
         uses: dawidd6/action-send-mail@v3
@@ -71,8 +76,8 @@ jobs:
           server_port: 465
           secure: true
           subject: GitHub Action Failure
-          to: ammarfarrukh2017@gmail.com
-          from: ammarfarrukh2017@gmail.com
+          to: ${{secrets.MAIL_NAME}}
+          from: ${{secrets.MAIL_NAME}}
           body: >
             Workflow of ${{github.repository}} initiated by ${{github.actor}} failed,
             kindly check the workflow logs!
