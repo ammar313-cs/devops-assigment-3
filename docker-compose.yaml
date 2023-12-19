@@ -3,7 +3,7 @@ version: "3.8"
 services:
   backend:
     container_name: backend
-    image: myapp
+    image: react_app
     ports:
       - 3000:3000
     command: npx nodemon index.js
@@ -11,7 +11,7 @@ services:
       - ./MyApp:/MyApp
   frontend:
     container_name: frontend
-    image: myapp
+    image: react_app
     ports:
       - 443:3000
     command: npm start
