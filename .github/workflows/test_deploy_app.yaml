@@ -43,7 +43,7 @@ jobs:
           key: ${{ secrets.SSH_PEM }}
           port: 22
           script: |
-            cd /home/ubuntu/react/devops-assignment2/react_app
+            cd /home/ubuntu/react/devops-assignment-3/react_app
             npm install  # Install new dependencies
       - name: Notify on Success
         if: success()
