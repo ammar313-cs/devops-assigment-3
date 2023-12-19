@@ -1,17 +1,21 @@
----
 version: "3.8"
 services:
   backend:
     container_name: backend
-    image: react_app
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 3000:3000
     command: npx nodemon index.js
     volumes:
       - ./react_app:/react_app
+
   frontend:
     container_name: frontend
-    image: react_app
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - 443:3000
     command: npm start
