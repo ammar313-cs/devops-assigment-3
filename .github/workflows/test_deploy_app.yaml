@@ -38,7 +38,7 @@ jobs:
         if: always()
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: 16.170.148.60
+          host: ${{ secrets.IP_T }}
           username: ubuntu
           key: ${{ secrets.SSH_PEM }}
           port: 22
@@ -60,7 +60,7 @@ jobs:
             Workflow of ${{github.repository}} initiated by ${{github.actor}} was
             successfully executed.
 
-            View the changes on the server http://16.170.148.60/
+            View the changes on the server http://${{ secrets.IP_T }}/
       - name: Notify on Failure
         if: failure()
         uses: dawidd6/action-send-mail@v3
