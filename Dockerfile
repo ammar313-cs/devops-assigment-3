@@ -13,6 +13,8 @@ RUN mkdir ./react_app
 
 COPY ./react_app ./react_app
 
+RUN chown -R node:node ./react_app
+
 WORKDIR ./react_app
 
 RUN npm install
